@@ -1,0 +1,3 @@
+include README.md
+recursive-include dragndrop_related *.py
+recursive-include dragndrop_related/templates *

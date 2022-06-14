@@ -1,0 +1,55 @@
+{% extends 'admin/change_form.html' %}
+{% load admin_urls %}
+
+{% block extrahead %}
+    {{ block.super}}
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+    </script>
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <style>
+        .drag-and-drop-related input[type=submit] { padding: 2px 3px; }
+        #dropzone-success { display: none; }
+    </style>
+{% endblock %}
+
+{% block after_related_objects %}
+    {{ block.super }}
+    <div class="inline-group drag-and-drop-related">
+        <fieldset class="module sortable">
+            <h2>Drag-and-drop upload for {{ related_model_name_plural }}</h2>
+            <div class="add-row">
+                {% if add %}
+                    <input class="button" type="submit" value="Save" name="_continue"> the {{ opts.verbose_name }} to enable drag-and-drop {{ related_model_name }} uploading here.
+                {% else %}
+                    <div class="dropzone" id="dropzone"></div>
+                    <div id="dropzone-success">
+                        <ul class="messagelist">
+                            <li class="success">
+                                Your {{ related_model_name }} was uploaded successfully. When you're finished uploading, <button type="button" class="button" onClick="window.location.reload();">reload</button> the page or <input class="button" type="submit" value="save and continue editing" name="_continue"> to see the new {{ related_model_name_plural }} reflected above and to make further edits.
+                            </li>
+                        </ul>
+                    </div>
+                    <script>
+                        var myDropzone = new Dropzone("div#dropzone", {
+                            acceptedFiles: "image/*",
+                            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+                            init: function() {
+                                this.on("success", function() {
+                                    document.getElementById("dropzone-success").style.display = 'block';
+                                });
+                            },
+                            paramName: "{{ related_model_field_name }}",
+                            url: "{% url opts|admin_urlname:'drag_and_drop' object_id %}",
+                        });
+                    </script>
+                {% endif %}
+            </div>
+        </fieldset>
+    </div>
+{% endblock %}

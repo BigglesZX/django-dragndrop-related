@@ -1,0 +1,8 @@
+*.pyc
+*.egg
+*.egg-info/
+Thumbs.db
+.DS_Store
+example_project/db.sqlite3
+example_project/media
+dist
