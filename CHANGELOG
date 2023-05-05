@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.2.0 (May 5th, 2023)
+---------------------
+
+* New: Improved compatibility with django-solo
+* Updated: Changed template path to match behaviour of other libraries
+
 0.1.0 (June 14th, 2022)
 -----------------------
 

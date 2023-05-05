@@ -105,7 +105,12 @@ class DragAndDropRelatedImageMixin(object):
     '''
 
     ''' Path to the custom admin `change_form` template '''
-    change_form_template = 'change_form.html'
+    change_form_template = 'admin/dragndrop_related/change_form.html'
+
+    ''' Path to template from which the custom admin `change_form` template
+        should inherit
+    '''
+    change_form_template_parent = 'admin/change_form.html'
 
     ''' Name of the reverse relation on the associated model to which images
         will be added
@@ -143,6 +148,8 @@ class DragAndDropRelatedImageMixin(object):
                 self.related_model_field_name,
             'related_model_order_field_name':
                 self.related_model_order_field_name,
+            'change_form_template_parent':
+                self.change_form_template_parent,
         }
 
     def add_view(self, request, form_url='', extra_context=None):
@@ -175,3 +182,16 @@ class DragAndDropRelatedImageMixin(object):
                     self.get_related_model_info(),
                     name='{0}_{1}_drag_and_drop'.format(*info)),
         ] + super().get_urls()
+
+
+class DragAndDropSingletonRelatedImageMixin(DragAndDropRelatedImageMixin):
+    ''' A variation of the mixin designed for use with singleton models
+        provided by `django-solo`. Ensures our `change_form` template inherits
+        from django-solo's, to preserve the minor differences in the singleton
+        UI.
+    '''
+
+    ''' Path to template that the custom admin `change_form` template should
+        inherit from
+    '''
+    change_form_template_parent = 'admin/solo/change_form.html'

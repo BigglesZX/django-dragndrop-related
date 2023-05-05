@@ -14,7 +14,7 @@ One of the most common requests I get from clients when working on Django projec
 
 It assumes some simplicity on the part of the related model – e.g. that only an `ImageField` is required to be populated – and uses [Dropzone.js](https://www.dropzone.dev/js/) to accept uploads and fire off POST requests to an endpoint which creates new child models using the related manager of the parent model.
 
-I decided not to try to support drag-and-drop uploads when *creating* parent model instances, since the uploads would need to be stashed somewhere temporarily then associated with the new model when it was saved. Instead this library operates only on existing model instances and requires the user to reload the page once they're done dropping files, so that Django's admin/inline UI can display the newly created child models for editing. This is acceptable in my use-cases but may not be in yours.
+I decided not to try to support drag-and-drop uploads when _creating_ parent model instances, since the uploads would need to be stashed somewhere temporarily then associated with the new model when it was saved. Instead this library operates only on existing model instances and requires the user to reload the page once they're done dropping files, so that Django's admin/inline UI can display the newly created child models for editing. This is acceptable in my use-cases but may not be in yours.
 
 ## Compatibility
 
@@ -61,6 +61,19 @@ class ImageInline(admin.StackedInline):
 @admin.register(Album)
 class AlbumAdmin(DragAndDropRelatedImageMixin, admin.ModelAdmin):
     inlines = [ImageInline]
+```
+
+## Usage in combination with [`django-solo`](https://github.com/lazybird/django-solo)
+
+The `django-solo` library provides its own admin `change_form` template with some minimal UI changes to assist with singleton models. When using `django-dragndrop-related` with a `django-solo` singleton model, there is a different mixin which will preserve the proper template inheritance:
+
+```python
+from dragndrop_related.views import DragAndDropSingletonRelatedImageMixin
+from solo.admin import SingletonModelAdmin
+
+@admin.register(models.Homepage)
+class HomepageAdmin(DragAndDropSingletonRelatedImageMixin, SingletonModelAdmin):
+    # ...
 ```
 
 ## Configuration

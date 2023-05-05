@@ -4,7 +4,7 @@
     1. Bump version number in setup.py
     2. Update CHANGELOG
     3. $ git commit ...
-    4. $ git tag -a x.x.x  # see `git tags` for latest
+    4. $ git tag -a x.x.x  # see `git tag` for latest
     5. $ git push origin main
     6. $ git push --tags
     7. $ python setup.py register sdist
@@ -14,7 +14,7 @@
 from setuptools import setup, find_packages  # noqa: E402
 
 
-VERSION = '.'.join(('0', '1', '0'))
+VERSION = '.'.join(('0', '2', '0'))
 
 DESCRIPTION = '''Drag-and-drop multiple uploading of related images/files for
               Django admin, using Dropzone.js'''
