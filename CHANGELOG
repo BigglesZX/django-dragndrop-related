@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.3.0 (June 7th, 2023)
+---------------------
+
+* Fixed: Proper (instead of implied) support for Django `FileField`
+* Updated: Added `FileField` example to example project
+* New: Added ability to customise `acceptFiles` configuration option passed to Dropzone.js
+
 0.2.0 (May 5th, 2023)
 ---------------------
 

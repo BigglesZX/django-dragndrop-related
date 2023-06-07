@@ -12,7 +12,7 @@ The example project shown uses [django-admin-thumbnails](https://pypi.org/projec
 
 One of the most common requests I get from clients when working on Django projects is to support some kind of drag-and-drop upload to save them the tedium of working with multiple file upload fields. I finally put some effort into solving this problem and came up with this library, which essentially provides for the creation of related models via AJAX POST request.
 
-It assumes some simplicity on the part of the related model – e.g. that only an `ImageField` is required to be populated – and uses [Dropzone.js](https://www.dropzone.dev/js/) to accept uploads and fire off POST requests to an endpoint which creates new child models using the related manager of the parent model.
+It assumes some simplicity on the part of the related model – e.g. that a valid instance only requires a single `ImageField` or `FileField` to be populated – and uses [Dropzone.js](https://www.dropzone.dev/js/) to accept uploads and fire off POST requests to an endpoint which creates new child models using the related manager of the parent model.
 
 I decided not to try to support drag-and-drop uploads when _creating_ parent model instances, since the uploads would need to be stashed somewhere temporarily then associated with the new model when it was saved. Instead this library operates only on existing model instances and requires the user to reload the page once they're done dropping files, so that Django's admin/inline UI can display the newly created child models for editing. This is acceptable in my use-cases but may not be in yours.
 
@@ -20,7 +20,7 @@ I decided not to try to support drag-and-drop uploads when _creating_ parent mod
 
 This library has been tested on Django 3.2 and 4.0 on Python 3.8, though I expect it to be fairly compatible with other versions. For now, the package is marked as requiring Python 3.6 or higher.
 
-**Please note that this library is an early beta release, mostly published so that I can share code between my own projects. It works well for my specific use-case but your mileage may vary. If you have issues with the library please open a ticket, but be aware it's not being developed intensively at this stage.**
+**Please note that this library is an early beta release, mostly published so that I can share code between my own projects. It works well for my specific use-case but your mileage may vary. If you have issues with the library please open a ticket and I'll review it, but be aware it's not being developed intensively at this stage.**
 
 ## Installation
 
@@ -148,6 +148,17 @@ class AlbumAdmin(DragAndDropRelatedImageMixin, admin.ModelAdmin):
 
     related_model_order_field_name = 'order'
 ```
+
+4. The Dropzone.js library supports an `acceptFiles` configuration option which restricts the types of files that can be selected or dropped in. If the field on your related child model is an `ImageField`, an `acceptFiles` value of `image/*` will be passed to Dropzone.js. For a `FileField` no restriction is specified by default. You can override the value of `acceptFiles` passed to Dropzone.js by specifying the `dropzone_accepted_files` property on the class that inherits from `DragAndDropRelatedImageMixin`, e.g.
+
+```python
+class AlbumAdmin(DragAndDropRelatedImageMixin, admin.ModelAdmin):
+    # ...
+
+    dropzone_accepted_files = 'application/pdf'
+```
+
+See Mozilla's [documentation for the `file` input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers) for more information about how these types can be specified.
 
 ## Development
 

@@ -37,7 +37,9 @@
                     </div>
                     <script>
                         var myDropzone = new Dropzone("div#dropzone", {
-                            acceptedFiles: "image/*",
+                            {% if dropzone_accepted_files %}
+                                acceptedFiles: "{{ dropzone_accepted_files }}",
+                            {% endif %}
                             headers: { "X-CSRFToken": "{{ csrf_token }}" },
                             init: function() {
                                 this.on("success", function() {

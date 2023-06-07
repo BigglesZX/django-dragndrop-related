@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.db import transaction
+from django.db import models, transaction
 from django.db.models import Max
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect)
@@ -29,14 +29,26 @@ class DragAndDropView(PermissionRequiredMixin, FormMixin, ProcessFormView,
 
     def get_form_class(self):
         ''' Construct a dynamic form class with a field named using the
-            `related_model_field_name` kwarg passed in from the `ModelAdmin`
+            `related_model_field_name` kwarg passed in from the `ModelAdmin`,
+            and with a type appropriate to the underlying field on the related
+            model
 
             source: https://stackoverflow.com/a/27505090/258794
         '''
 
-        related_model_field_name = self.kwargs['related_model_field_name']
+        related_manager_field_name = \
+            self.kwargs['related_manager_field_name']
+        related_model_field_name = \
+            self.kwargs['related_model_field_name']
+        related_model = \
+            getattr(self.object, related_manager_field_name).field.model
+        related_model_field_class = \
+            related_model._meta.get_field(related_model_field_name)
+
         form_fields = {}
-        form_fields[related_model_field_name] = forms.ImageField()
+        form_fields[related_model_field_name] = \
+            forms.ImageField() if isinstance(related_model_field_class, models.ImageField) else forms.FileField()  # noqa: E501
+
         return type('DragAndDropForm', (forms.Form,), form_fields)
 
     def get_permission_required(self):
@@ -113,11 +125,13 @@ class DragAndDropRelatedImageMixin(object):
     change_form_template_parent = 'admin/change_form.html'
 
     ''' Name of the reverse relation on the associated model to which images
-        will be added
+        or files will be added
     '''
     related_manager_field_name = 'images'
 
-    ''' Name of the field on the *related* model where images will be saved '''
+    ''' Name of the field on the *related* model where images or files will
+        be saved
+    '''
     related_model_field_name = 'image'
 
     ''' Name of the ordering field on the *related* model, which will be used
@@ -128,6 +142,14 @@ class DragAndDropRelatedImageMixin(object):
     '''
     related_model_order_field_name = None
 
+    ''' Customise the `acceptedFiles` option passed to the Dropzone library in
+        the `add` or `change` templates
+
+        Defaults to `None` to use a sensible default based on the type of the
+        field on the related model
+    '''
+    dropzone_accepted_files = None
+
     def get_related_model_info(self):
         ''' Access the related model according to the value of
             `related_manager_field_name` and build a dict of useful info
@@ -135,6 +157,16 @@ class DragAndDropRelatedImageMixin(object):
 
         related_model = \
             getattr(self.model, self.related_manager_field_name).field.model
+
+        related_model_field_class = \
+            related_model._meta.get_field(self.related_model_field_name)
+        if self.dropzone_accepted_files:
+            dropzone_accepted_files = self.dropzone_accepted_files
+        elif isinstance(related_model_field_class, models.ImageField):
+            dropzone_accepted_files = 'image/*'
+        else:
+            dropzone_accepted_files = None
+
         return {
             'related_model':
                 related_model,
@@ -150,6 +182,8 @@ class DragAndDropRelatedImageMixin(object):
                 self.related_model_order_field_name,
             'change_form_template_parent':
                 self.change_form_template_parent,
+            'dropzone_accepted_files':
+                dropzone_accepted_files,
         }
 
     def add_view(self, request, form_url='', extra_context=None):

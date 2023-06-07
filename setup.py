@@ -14,7 +14,7 @@
 from setuptools import setup, find_packages  # noqa: E402
 
 
-VERSION = '.'.join(('0', '2', '0'))
+VERSION = '.'.join(('0', '3', '0'))
 
 DESCRIPTION = '''Drag-and-drop multiple uploading of related images/files for
               Django admin, using Dropzone.js'''
@@ -57,6 +57,8 @@ setup(
             'django-admin-thumbnails>=0.2.6',
             'django-cleanup>=6.0.0',
             'flake8>=3.7.7',
+            'ipdb>=0.13.13',
+            'ipython>=8.12.2',
             'Pillow>=9.1.1',
             'setuptools>=41.0.0',
             'twine>=1.13.0',

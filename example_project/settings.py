@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'dragndrop_related',
     'example_project.gallery.apps.GalleryConfig',
+    'example_project.library.apps.LibraryConfig',
 ]
 
 MIDDLEWARE = [
