@@ -7,7 +7,7 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
 from django.urls import re_path, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin, ProcessFormView
-
+from django.conf import settings
 
 class DragAndDropView(PermissionRequiredMixin, FormMixin, ProcessFormView,
                       DetailView):
@@ -149,6 +149,14 @@ class DragAndDropRelatedImageMixin(object):
         field on the related model
     '''
     dropzone_accepted_files = None
+
+
+    ''' Get the dropzone js and css location depending on the settings. If it
+        is defined in django's project settings, use this value. Otherwise, 
+        get from unpkg.com
+    '''
+    
+    dropzone_use_cdn = settings.DRAGNDROP_RELATED_USE_CDN if settings.DRAGNDROP_RELATED_USE_CDN else True
 
     def get_related_model_info(self):
         ''' Access the related model according to the value of
