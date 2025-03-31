@@ -14,7 +14,7 @@
 from setuptools import setup, find_packages  # noqa: E402
 
 
-VERSION = '.'.join(('0', '3', '0'))
+VERSION = '.'.join(('0', '3', '1'))
 
 DESCRIPTION = '''Drag-and-drop multiple uploading of related images/files for
               Django admin, using Dropzone.js'''
@@ -32,6 +32,10 @@ CLASSIFIERS = [
     'Framework :: Django',
     'Framework :: Django :: 3.2',
     'Framework :: Django :: 4.0',
+    'Framework :: Django :: 4.2',
+    'Framework :: Django :: 5.0',
+    'Framework :: Django :: 5.1',
+    'Framework :: Django :: 5.2',
 ]
 
 setup(

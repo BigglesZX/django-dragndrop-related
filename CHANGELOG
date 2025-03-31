@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.1 (March 31st, 2025)
+---------------------
+
+* New: Added ability to self-host Dropzone.js via new `DRAGNDROP_RELATED_USE_STATIC_FILES` setting (with thanks to @tigre-bleu)
+
 0.3.0 (June 7th, 2023)
 ---------------------
 

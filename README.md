@@ -39,10 +39,10 @@ INSTALLED_APPS = [
 ]
 ```
 
-By default, the javascript and css for dropzone.js are loaded from unpkg cdn. If you want to self host thoses, you need to put the `dropzone.min.js` and `dropzone.min.css` in your static directory and add the following in `settings.py`:
+By default, the JavaScript and CSS for Dropzone.js are loaded from the UNPKG CDN. If you want to self-host these files for any reason, you need to add `dropzone.min.js` and `dropzone.min.css` to your static directory and add the following to your `settings.py`:
 
 ```python
-DRAGNDROP_RELATED_USE_CDN = False
+DRAGNDROP_RELATED_USE_STATIC_FILES = False
 ```
 
 Import the mixin and apply it to your "parent" class's `ModelAdmin`:

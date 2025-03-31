@@ -9,6 +9,7 @@ from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin, ProcessFormView
 from django.conf import settings
 
+
 class DragAndDropView(PermissionRequiredMixin, FormMixin, ProcessFormView,
                       DetailView):
     ''' Define a generic view used to handle POST requests from the Dropzone
@@ -150,11 +151,16 @@ class DragAndDropRelatedImageMixin(object):
     '''
     dropzone_accepted_files = None
 
-    ''' Get the dropzone js and css location depending on the settings. If it
-        is defined in django's project settings, load from STATIC folder.
-        Otherwise, load from unpkg.com
+    ''' Determine how to load the Dropzone library
+
+        By default the library's JS and CSS assets will be loaded from the
+        UNPKG CDN. For users wanting to self-host, the
+        `DRAGNDROP_RELATED_USE_STATIC_FILES` setting can be used. You will
+        need to add a suitable version of `dropzone.min.js` and
+        `dropzone.min.css` to your static files.
     '''
-    dropzone_use_cdn = settings.DRAGNDROP_RELATED_USE_CDN if hasattr(settings, "DRAGNDROP_RELATED_USE_CDN") else True
+    dropzone_use_static_files = \
+        getattr(settings, 'DRAGNDROP_RELATED_USE_STATIC_FILES', False)
 
     def get_related_model_info(self):
         ''' Access the related model according to the value of
@@ -190,8 +196,8 @@ class DragAndDropRelatedImageMixin(object):
                 self.change_form_template_parent,
             'dropzone_accepted_files':
                 dropzone_accepted_files,
-            'dropzone_use_cdn':
-                self.dropzone_use_cdn,
+            'dropzone_use_static_files':
+                self.dropzone_use_static_files,
         }
 
     def add_view(self, request, form_url='', extra_context=None):
