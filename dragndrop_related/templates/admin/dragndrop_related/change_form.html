@@ -1,9 +1,14 @@
 {% extends change_form_template_parent %}
 {% load admin_urls %}
+{% load static %}
 
 {% block extrahead %}
     {{ block.super}}
-    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    {% if dropzone_use_cdn %}
+        <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    {% else %}
+        <script src="{% static 'dropzone.min.js' %}"></script>
+    {% endif %}
     <script>
         Dropzone.autoDiscover = false;
     </script>
@@ -11,7 +16,11 @@
 
 {% block extrastyle %}
     {{ block.super }}
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    {% if dropzone_use_cdn %}
+        <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    {% else %}
+        <link rel="stylesheet" href="{% static 'dropzone.min.css' %}" type="text/css" />
+    {% endif %}
     <style>
         .drag-and-drop-related input[type=submit] { padding: 2px 3px; }
         #dropzone-success { display: none; }
