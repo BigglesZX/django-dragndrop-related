@@ -150,13 +150,11 @@ class DragAndDropRelatedImageMixin(object):
     '''
     dropzone_accepted_files = None
 
-
     ''' Get the dropzone js and css location depending on the settings. If it
-        is defined in django's project settings, use this value. Otherwise, 
-        get from unpkg.com
+        is defined in django's project settings, load from STATIC folder.
+        Otherwise, load from unpkg.com
     '''
-    
-    dropzone_use_cdn = settings.DRAGNDROP_RELATED_USE_CDN if settings.DRAGNDROP_RELATED_USE_CDN else True
+    dropzone_use_cdn = settings.DRAGNDROP_RELATED_USE_CDN if hasattr(settings, "DRAGNDROP_RELATED_USE_CDN") else True
 
     def get_related_model_info(self):
         ''' Access the related model according to the value of
@@ -192,6 +190,8 @@ class DragAndDropRelatedImageMixin(object):
                 self.change_form_template_parent,
             'dropzone_accepted_files':
                 dropzone_accepted_files,
+            'dropzone_use_cdn':
+                self.dropzone_use_cdn,
         }
 
     def add_view(self, request, form_url='', extra_context=None):
