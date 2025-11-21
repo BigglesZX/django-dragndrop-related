@@ -11,7 +11,7 @@ class EbookInline(admin.StackedInline):
 
 @admin.register(Collection)
 class CollectionAdmin(DragAndDropRelatedImageMixin, admin.ModelAdmin):
-    dropzone_accepted_files = 'application/pdf'
+    dropzone_accepted_files = "application/pdf"
     inlines = [EbookInline]
-    related_manager_field_name = 'ebooks'
-    related_model_field_name = 'file'
+    related_manager_field_name = "ebooks"
+    related_model_field_name = "file"

@@ -18,9 +18,22 @@ I decided not to try to support drag-and-drop uploads when _creating_ parent mod
 
 ## Compatibility
 
-This library has been tested on Django 3.2 and 4.0 on Python 3.8, though I expect it to be fairly compatible with other versions. For now, the package is marked as requiring Python 3.6 or higher.
+The widget has been tested on all Python/Django version combinations [officially supported](https://docs.djangoproject.com/en/5.2/faq/install/#what-python-version-can-i-use-with-django) by the Django project:
 
-**Please note that this library is an early beta release, mostly published so that I can share code between my own projects. It works well for my specific use-case but your mileage may vary. If you have issues with the library please open a ticket and I'll review it, but be aware it's not being developed intensively at this stage.**
+|                | Django 4.2 | 5.0 | 5.1 | 5.2 |
+|---------------:|:----------:|:---:|:---:|:---:|
+| **Python 3.8** | ✔          |     |     |     |
+| **3.9**        | ✔          |     |     |     |
+| **3.10**       | ✔          | ✔   | ✔   | ✔   |
+| **3.11**       | ✔          | ✔   | ✔   | ✔   |
+| **3.12**       | ✔          | ✔   | ✔   | ✔   |
+| **3.13**       |            |     | ✔   | ✔   |
+| **3.14**       |            |     |     | ✔   |
+
+If you need to use `django-admin-thumbnails` with Django 3, please use a version of the package prior to `0.4.0`.
+
+> [!NOTE]
+> Please note that this library is an **early beta release**, mostly published so that I can share code between my own projects. It works well for my specific use-case but your mileage may vary. If you have issues with the library please open a ticket and I'll review it, but be aware it's not being actively developed at this stage.
 
 ## Installation
 
@@ -186,10 +199,10 @@ $ open http://localhost:8000/admin/
 
 Navigate to the example `Album` model in the `Gallery` app to see the widget in action.
 
-To lint with `flake8`:
+Run the basic test suite across environments using `tox`:
 
 ```shell
-$ flake8
+$ tox run
 ```
 
 ## Issues, Suggestions, Contributions

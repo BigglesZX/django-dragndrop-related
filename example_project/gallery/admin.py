@@ -6,7 +6,7 @@ from dragndrop_related.views import DragAndDropRelatedImageMixin
 from .models import Album, Image
 
 
-@admin_thumbnails.thumbnail('image')
+@admin_thumbnails.thumbnail("image")
 class ImageInline(admin.StackedInline):
     extra = 0
     model = Image
